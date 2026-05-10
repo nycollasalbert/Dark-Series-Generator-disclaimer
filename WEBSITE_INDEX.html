@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dark Series Generator</title>
+  <meta name="description" content="Dark Series Generator e uma ferramenta desktop local para Windows que gera videos curtos a partir de videos longos e pode integrar YouTube e TikTok via OAuth.">
+  <style>
+    :root {
+      --bg: #0B0B0F;
+      --card: #15151D;
+      --card-2: #1D1D27;
+      --text: #FFFFFF;
+      --muted: #A1A1AA;
+      --line: rgba(255, 255, 255, 0.10);
+      --accent: #FF6A00;
+      --accent-soft: rgba(255, 106, 0, 0.14);
+      --max: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black, transparent 72%);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .shell {
+      width: min(100% - 32px, var(--max));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      backdrop-filter: blur(14px);
+      background: rgba(11, 11, 15, 0.78);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 74px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: var(--accent);
+      color: #120600;
+      font-weight: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .hero {
+      padding: 92px 0 48px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      padding: 7px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--accent);
+    }
+
+    h1 {
+      max-width: 860px;
+      margin: 0;
+      font-size: clamp(42px, 8vw, 84px);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 22px);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      text-decoration: none;
+      font-weight: 650;
+    }
+
+    .button.primary {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #160700;
+    }
+
+    .button.secondary {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+    }
+
+    .section {
+      padding: 38px 0;
+    }
+
+    .section h2 {
+      margin: 0 0 16px;
+      font-size: 28px;
+      letter-spacing: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      min-height: 176px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .legal-panel {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 72px;
+    }
+
+    .panel,
+    .legal-list {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--card);
+    }
+
+    .panel {
+      padding: 28px;
+    }
+
+    .panel p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .legal-list {
+      overflow: hidden;
+    }
+
+    .legal-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 22px;
+      text-decoration: none;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .legal-link:last-child {
+      border-bottom: 0;
+    }
+
+    .legal-link span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .legal-link:hover {
+      background: var(--accent-soft);
+    }
+
+    footer {
+      padding: 28px 0 42px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 820px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 18px 0;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+      }
+
+      .hero {
+        padding-top: 58px;
+      }
+
+      .grid,
+      .legal-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell nav">
+      <a class="brand" href="WEBSITE_INDEX.html" aria-label="Dark Series Generator">
+        <span class="mark">D</span>
+        <span>Dark Series Generator</span>
+      </a>
+      <nav class="nav-links" aria-label="Documentos legais">
+        <a href="terms.html">Terms of Service</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="disclaimer.html">Disclaimer</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="shell hero">
+      <div class="eyebrow"><span class="dot"></span> Desktop local para Windows</div>
+      <h1>Dark Series Generator</h1>
+      <p class="lead">
+        Ferramenta local de automacao de edicao e organizacao de videos, criada para transformar videos longos em cortes curtos e preparar conteudos para fluxos com YouTube e TikTok via OAuth.
+      </p>
+      <div class="actions">
+        <a class="button primary" href="privacy.html">Ver Privacy Policy</a>
+        <a class="button secondary" href="terms.html">Ver Terms of Service</a>
+      </div>
+    </section>
+
+    <section class="shell section" aria-labelledby="features-title">
+      <h2 id="features-title">Recursos principais</h2>
+      <div class="grid">
+        <article class="card">
+          <strong>Processamento local</strong>
+          <p>Os videos sao processados principalmente no computador do usuario, usando ferramentas locais como FFmpeg.</p>
+        </article>
+        <article class="card">
+          <strong>Automacao editorial</strong>
+          <p>O aplicativo auxilia na criacao, organizacao e exportacao de cortes curtos a partir de videos longos.</p>
+        </article>
+        <article class="card">
+          <strong>OAuth oficial</strong>
+          <p>Conexoes com YouTube, Google e TikTok usam telas oficiais das plataformas. O aplicativo nao armazena senhas.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell section" aria-labelledby="legal-title">
+      <h2 id="legal-title">Documentos legais</h2>
+      <div class="legal-panel">
+        <div class="panel">
+          <p>
+            Estes documentos descrevem as regras de uso, praticas de privacidade e limitacoes do Dark Series Generator para uso em paginas publicas, revisoes OAuth, TikTok Developers, Google OAuth e YouTube API.
+          </p>
+        </div>
+        <div class="legal-list">
+          <a class="legal-link" href="terms.html">
+            <strong>Terms of Service</strong>
+            <span>Termos de uso</span>
+          </a>
+          <a class="legal-link" href="privacy.html">
+            <strong>Privacy Policy</strong>
+            <span>Privacidade e OAuth</span>
+          </a>
+          <a class="legal-link" href="disclaimer.html">
+            <strong>Disclaimer</strong>
+            <span>Avisos e limitacoes</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      Dark Series Generator nao e afiliado, patrocinado ou endossado por TikTok, Google ou YouTube. Contato: contato@darkseriesgenerator.app
+    </div>
+  </footer>
+</body>
+</html>
